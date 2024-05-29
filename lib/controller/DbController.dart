@@ -27,13 +27,13 @@ class DbController extends ChangeNotifier {
     initData();
   }
 
-  void updateData({required Employee employee}) {
-    DbHelper.dbHelper.updataData(employee: employee);
+  Future<void> updateData({required Employee employee, required int id}) async {
+    await DbHelper.dbHelper.updataData(employee: employee, id: id);
     initData();
   }
 
-  Future<void> searchData({required Employee employee}) async {
-    allSearchData = await DbHelper.dbHelper.searchData(value: employee.name);
+  Future<void> searchData({required String value}) async {
+    allSearchData = await DbHelper.dbHelper.searchData(value: value);
     initData();
   }
 }

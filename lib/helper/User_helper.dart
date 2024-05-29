@@ -63,15 +63,13 @@ class DbHelper {
     await database.rawInsert(sql, args);
   }
 
-  Future<void> updataData({required Employee employee}) async {
+  Future<void> updataData({required Employee employee, required int id}) async {
     await database
-        .update(tableName, employee.getEmployee, where: 'id = ${employee.id}')
+        .update(tableName, employee.getEmployee, where: 'id = $id')
         .then(
           (value) => logger.i('updated'),
         )
         .onError((error, stackTrace) => 'error : $error');
-
-    sql = update 
   }
 
   Future<void> deleteData({required Employee employee}) async {

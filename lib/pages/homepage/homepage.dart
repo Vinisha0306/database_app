@@ -60,8 +60,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           onTap: (value) => pageController.animateToPage(value,
               duration: Duration(milliseconds: 200), curve: Curves.bounceIn),
           tabs: const [
-            Text('All Employees'),
-            Text('Search Employees'),
+            Tab(
+              child: Text('All Employees'),
+            ),
+            Tab(
+              child: Text('Search Employees'),
+            ),
           ],
         ),
       ),
@@ -169,9 +173,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                           title: 'Email'),
                                       OutlinedButton(
                                         onPressed: () {
-                                          Provider.of<DbController>(context,
-                                                  listen: false)
-                                              .updateData(
+                                          listanble.updateData(
                                             employee: Employee(
                                                 id,
                                                 name,
@@ -182,6 +184,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                                 exp,
                                                 contact,
                                                 email),
+                                            id: listanble
+                                                .allEmployeeData[index].id,
                                           );
                                           print('name : $name');
                                           Navigator.pop(context);
@@ -199,8 +203,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                           ),
                           IconButton(
                             onPressed: () {
-                              Provider.of<DbController>(context, listen: false)
-                                  .deleteData(
+                              listanble.deleteData(
                                 employee: Employee(id, name, salary, dept, city,
                                     gender, exp, contact, email),
                               );
@@ -215,13 +218,27 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   )
             : Column(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: TextField(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      onChanged: (val) {
+                        if (val.isEmpty) {
+                          listanble.allSearchData.clear();
+                        } else {
+                          listanble.searchData(value: val);
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Search Value',
+                      ),
+                    ),
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemBuilder: (context, index) => ListTile(),
+                      itemCount: listanble.allSearchData.length,
+                      itemBuilder: (context, index) => ListTile(
+                        title: Text(listanble.allSearchData[index].name),
+                      ),
                     ),
                   ),
                 ],
